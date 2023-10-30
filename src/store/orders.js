@@ -49,15 +49,6 @@ const orderSlice = createSlice({
         orders: updatedOrders,
       };
     },
-
-    clearCart(state) {
-      return {
-        ...state,
-        orders: [],
-        ordersCount: 0,
-        totalPrice: 0,
-      };
-    },
   },
 });
 
@@ -68,10 +59,11 @@ export const getRemoteData = () => async (dispatch, state) => {
   OrdersData.forEach((item) => dispatch(addToOrders(item)));
 };
 
-export const addNewOrder = () => async (dispatch, state) => {
+export const addNewOrder = (item) => async (dispatch, state) => {
   const data = await superagent
     .post(`${import.meta.env.VITE_DATABASE_URL}/orders`)
-    .set("authorization", `Bearer ${cookie.load("auth")}`);
+    .set("authorization", `Bearer ${cookie.load("auth")}`)
+    .send(item);
   if (data.body) {
     try {
       dispatch(addToOrders(data.body));
@@ -80,6 +72,32 @@ export const addNewOrder = () => async (dispatch, state) => {
     }
   }
 };
+export const deleteOrder = (item) => async (dispatch, state) => {
+  const data = await superagent
+    .delete(`${import.meta.env.VITE_DATABASE_URL}/orders/${item.id}`)
+    .set("authorization", `Bearer ${cookie.load("auth")}`);
+  if (data.body) {
+    try {
+      dispatch(removeFromOrders(item));
+    } catch (e) {
+      console.error(e);
+    }
+  }
+};
 
-export const { addToOrders, removeFromOrders, clearCart } = orderSlice.actions;
+export const updateOneOrder = (item) => async (dispatch, state) => {
+  const data = await superagent
+    .put(`${import.meta.env.VITE_DATABASE_URL}/orders/${item.id}`)
+    .set("authorization", `Bearer ${cookie.load("auth")}`)
+    .send(item);
+  if (data.body) {
+    try {
+      dispatch(updateOrder(item));
+    } catch (e) {
+      console.error(e);
+    }
+  }
+};
+
+export const { addToOrders, removeFromOrders, updateOrder } = orderSlice.actions;
 export default orderSlice.reducer;

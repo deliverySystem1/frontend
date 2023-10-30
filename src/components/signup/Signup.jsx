@@ -1,15 +1,15 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable no-undef */
 import { Button, Checkbox, Form, Input } from "antd";
-import { login, validateToken } from "../../store/user";
+import { signup, validateToken } from "../../store/user";
 
 import { connect } from "react-redux";
 import { useEffect } from "react";
 import cookie from "react-cookies";
 
-const Login = (props) => {
+const Signup = (props) => {
   const onFinish = (values) => {
-    props.login(values);
+    props.signup(values.username, values.Password, values.role);
     console.log("Success:", values);
   };
   const onFinishFailed = (errorInfo) => {
@@ -69,6 +69,30 @@ const Login = (props) => {
         </Form.Item>
 
         <Form.Item
+          label='Email'
+          name='Email'
+          rules={[
+            {
+              required: true,
+              message: "Please input your Email!",
+            },
+          ]}>
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label='Role'
+          name='Role'
+          rules={[
+            {
+              required: true,
+              message: "Please input your role!",
+            },
+          ]}>
+          <Input />
+        </Form.Item>
+
+        <Form.Item
           name='remember'
           valuePropName='checked'
           wrapperCol={{
@@ -97,7 +121,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  login,
+  signup,
   validateToken: (e) => dispatch(validateToken(e)),
 });
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);
