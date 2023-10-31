@@ -16,6 +16,7 @@ const userSlice = createSlice({
   },
   reducers: {
     validateToken(state, action) {
+      console.log(action.payload, "---------------------------");
       try {
         let validUser = jwt_decode(action.payload);
         cookie.save("auth", action.payload);
@@ -25,7 +26,6 @@ const userSlice = createSlice({
           token: action.payload,
           userInfo: validUser
         };
-
       } catch (e) {
         console.log("Token Validation Error", e);
         return {
@@ -36,7 +36,6 @@ const userSlice = createSlice({
         };
       }
     },
-
   },
 });
 
@@ -80,7 +79,6 @@ export const signup = (values) => async (dispatch, state) => {
     }
   }
 };
-
 
 export const { validateToken } = userSlice.actions;
 export default userSlice.reducer;

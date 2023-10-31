@@ -17,6 +17,16 @@ const Login = (props) => {
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
+  console.log(props.myUser);
+
+  // useEffect(() => {
+  //   const qs = new URLSearchParams(window.location.search);
+  //   const cookieToken = cookie.load("auth");
+  //   const token = qs.get("token") || cookieToken || null;
+  //   props.validateToken(token);
+  // }, []);
+
   return (
     <div>
       <Form
@@ -104,5 +114,8 @@ const Login = (props) => {
 const mapStateToProps = (state) => ({
   myUser: state.user,
 });
-const mapDispatchToProps = { login };
+
+const mapDispatchToProps = {
+  login,
+};
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
