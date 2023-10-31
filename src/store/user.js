@@ -24,9 +24,7 @@ const userSlice = createSlice({
           ...state,
           loggedIn: true,
           token: action.payload,
-          userInfo: {
-            validUser,
-          },
+          userInfo: validUser
         };
       } catch (e) {
         console.log("Token Validation Error", e);
@@ -42,40 +40,34 @@ const userSlice = createSlice({
 });
 
 export const login = (values) => async (dispatch, state) => {
+  console.log('ssssssssssssssssssssssss')
   const data = await superagent
     .post(`${import.meta.env.VITE_DATABASE_URL}/signin`)
-    .set(
-      "authorization",
-      `Basic ${base64.encode(`${values.username}:${values.password}`)}`
-    );
-
+    .set("authorization", `Basic ${base64.encode(`${values.username}:${values.password}`)}`);
   if (data.body) {
     try {
       dispatch(validateToken(data.body.token));
-      console.log(data.body);
+      console.log(data.body)
     } catch (e) {
       // setLoginState(token, user, e);
       console.error(e);
     }
   }
-  useEffect(() => {
-    const qs = new URLSearchParams(window.location.search);
-    const cookieToken = cookie.load("auth");
-    const token = qs.get("token") || cookieToken || null;
-    dispatch(validateToken(token));
-  }, []);
-};
-export const signup = (values) => async (dispatch, state) => {
-  console.log("values from siginup:", values);
 
+  // useEffect(() => {
+  //   const qs = new URLSearchParams(window.location.search);
+  //   const cookieToken = cookie.load("auth");
+  //   const token = qs.get("token") || cookieToken || null;
+  //   validateToken(token);
+  // }, []);
+};
+
+export const signup = (values) => async (dispatch, state) => {
+  console.log('iiiiiiiiiiiiiiiiiiiiiii')
   const data = await superagent
     .post(`${import.meta.env.VITE_DATABASE_URL}/signup`)
-    .send({
-      username: values.username,
-      password: values.password,
-      email: values.email,
-      role: values.role,
-    });
+    .send({ username: values.username, password: values.password, email: values.email, role: values.role }
+    );
 
   if (data.body) {
     try {
@@ -88,11 +80,5 @@ export const signup = (values) => async (dispatch, state) => {
   }
 };
 
-// useEffect(() => {
-//   const qs = new URLSearchParams(window.location.search);
-//   const cookieToken = cookie.load("auth");
-//   const token = qs.get("token") || cookieToken || null;
-//   validateToken(token);
-// }, []);
 export const { validateToken } = userSlice.actions;
 export default userSlice.reducer;

@@ -1,17 +1,15 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable no-undef */
 import { Button, Checkbox, Form, Input } from "antd";
-import { login } from "../../store/user";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { When } from "react-if";
+import { signup, validateToken } from "../../store/user";
 
-const Login = (props) => {
-  //   const [state, setstate] = useState(initialState);
-  //   const [state, setstate] = useState(initialState);
-  console.log(props.myUser, "jhbygvhgvsdfgdgsdfg");
+import { connect } from "react-redux";
+import { useEffect } from "react";
+import cookie from "react-cookies";
+
+const Signup = (props) => {
   const onFinish = (values) => {
-    props.login(values);
+    props.signup(values);
     console.log("Success:", values);
   };
   const onFinishFailed = (errorInfo) => {
@@ -74,6 +72,32 @@ const Login = (props) => {
         </Form.Item>
 
         <Form.Item
+          label="Email"
+          name="email"
+          rules={[
+            {
+              required: true,
+              message: "Please input your Email!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="Role"
+          name="role"
+          rules={[
+            {
+              required: true,
+              message: "Please input your role!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
           name="remember"
           valuePropName="checked"
           wrapperCol={{
@@ -94,18 +118,6 @@ const Login = (props) => {
             Submit
           </Button>
         </Form.Item>
-        <When condition={props.myUser.userInfo.role == "admin"}>
-          <Button type="link" htmlType="button">
-            If you dont have an account you can register from
-            <Link to="/register"> Here</Link>
-          </Button>
-        </When>
-        <When condition={props.myUser.userInfo.role == "manager"}>
-          <Button type="link" htmlType="button">
-            Add a new employee from
-            <Link to="/register"> Here</Link>
-          </Button>
-        </When>
       </Form>
     </div>
   );
@@ -116,6 +128,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  login,
+  signup,
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);
