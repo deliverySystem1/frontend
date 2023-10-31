@@ -1,15 +1,15 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable no-undef */
 import { Button, Checkbox, Form, Input } from "antd";
-import { login, validateToken } from "../../store/user";
+import { signup, validateToken } from "../../store/user";
 
 import { connect } from "react-redux";
 import { useEffect } from "react";
 import cookie from "react-cookies";
 
-const Login = (props) => {
+const Signup = (props) => {
   const onFinish = (values) => {
-    props.login(values);
+    props.myUser.signup(values);
     console.log("Success:", values);
   };
   const onFinishFailed = (errorInfo) => {
@@ -18,12 +18,13 @@ const Login = (props) => {
 
   console.log(props.myUser);
 
-  // useEffect(() => {
-  //   const qs = new URLSearchParams(window.location.search);
-  //   const cookieToken = cookie.load("auth");
-  //   const token = qs.get("token") || cookieToken || null;
-  //   props.validateToken(token);
-  // }, []);
+  useEffect(() => {
+    const qs = new URLSearchParams(window.location.search);
+    const cookieToken = cookie.load("auth");
+    const token = qs.get("token") || cookieToken || null;
+    console.log(token,"token")
+    props.validateToken(token);
+  }, []);
 
   return (
     <div>
@@ -69,6 +70,30 @@ const Login = (props) => {
         </Form.Item>
 
         <Form.Item
+          label='Email'
+          name='email'
+          rules={[
+            {
+              required: true,
+              message: "Please input your Email!",
+            },
+          ]}>
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label='Role'
+          name='role'
+          rules={[
+            {
+              required: true,
+              message: "Please input your role!",
+            },
+          ]}>
+          <Input />
+        </Form.Item>
+
+        <Form.Item
           name='remember'
           valuePropName='checked'
           wrapperCol={{
@@ -97,7 +122,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  login,
+  signup,
   validateToken: (e) => dispatch(validateToken(e)),
 });
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);
