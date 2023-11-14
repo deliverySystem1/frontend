@@ -1,10 +1,11 @@
-/* eslint-disable react-refresh/only-export-components */
-/* eslint-disable no-undef */
 import { Button, Checkbox, Form, Input } from "antd";
-import { login } from "../../store/user";
+import { login, validateToken } from "../../store/user";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { When } from "react-if";
+import { useEffect } from "react";
+import cookie from "react-cookies";
+import { useDispatch } from "react-redux";
 
 const Login = (props) => {
   //   const [state, setstate] = useState(initialState);
@@ -18,14 +19,19 @@ const Login = (props) => {
     console.log("Failed:", errorInfo);
   };
 
-  console.log(props.myUser);
+  console.log(props.myUser, "***********");
+  const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   const qs = new URLSearchParams(window.location.search);
-  //   const cookieToken = cookie.load("auth");
-  //   const token = qs.get("token") || cookieToken || null;
-  //   props.validateToken(token);
-  // }, []);
+  const validateuser = (token) => {
+    dispatch(validateToken(token));
+  };
+
+  useEffect(() => {
+    const qs = new URLSearchParams(window.location.search);
+    const cookieToken = cookie.load("auth");
+    const token = qs.get("token") || cookieToken || null;
+    validateuser(token);
+  }, []);
 
   return (
     <div>
@@ -117,5 +123,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   login,
+  // validateToken: () => dispatch(validateToken()),
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
