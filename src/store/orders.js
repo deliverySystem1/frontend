@@ -72,6 +72,7 @@ export const addNewOrder = (item) => async (dispatch, state) => {
     }
   }
 };
+
 export const deleteOrder = (item) => async (dispatch, state) => {
   const data = await superagent
     .delete(`${import.meta.env.VITE_DATABASE_URL}/orders/${item.id}`)
