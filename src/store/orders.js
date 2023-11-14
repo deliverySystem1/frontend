@@ -60,9 +60,10 @@ export const getRemoteData = () => async (dispatch, state) => {
 };
 
 export const addNewOrder = (item) => async (dispatch, state) => {
+  console.log(item,"item")
   const data = await superagent
     .post(`${import.meta.env.VITE_DATABASE_URL}/orders`)
-    .set("authorization", `Bearer ${cookie.load("auth")}`)
+    // .set("authorization", `Bearer ${cookie.load("auth")}`)
     .send(item);
   if (data.body) {
     try {

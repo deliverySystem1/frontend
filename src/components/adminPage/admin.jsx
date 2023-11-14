@@ -35,6 +35,7 @@ function AdminForm(props) {
 
   const onFinish = (values) => {
     console.log("Success:", values);
+    props.addNewOrder(values)
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -117,10 +118,10 @@ function AdminForm(props) {
         </Form.Item>
 
         <Form.Item label="long" name="long">
-          <Input />
+        <InputNumber />
         </Form.Item>
         <Form.Item label="lat" name="lat">
-          <Input />
+        <InputNumber />
         </Form.Item>
         <Form.Item
           wrapperCol={{
